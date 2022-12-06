@@ -4,9 +4,17 @@ import './App.css';
 function App() {
   return (
     <div>
-      Begin hier met de opdracht!
+        <img src="" alt=""/>
+        <div>
+            <button>Vorige</button>
+            <button>Volgende</button>
+        </div>
+        <div>
+            <PokemonCard/>
+        </div>
     </div>
   );
 }
 
 export default App;
+
