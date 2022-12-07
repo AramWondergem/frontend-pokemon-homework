@@ -1,14 +1,7 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect} from "react";
 import axios from "axios";
 
-const useFetch = ( dataUrl ) => {
-    // Set initial state variables
-    const [ data, setData ] = useState( [] );
-    const [ catchError, setCatchError ] = useState( null );
-    const [ isLoading, setIsLoading ] = useState( false );
-
-    const controllerRef = useRef( false );
-
+function useFetch ( dataUrl, setData, setCatchError, setIsLoading ) {
     // Run the effect on mount
     useEffect( () => {
         let isMounted = true;
@@ -22,7 +15,6 @@ const useFetch = ( dataUrl ) => {
             setIsLoading( true );
             try {
                 // Fetch the response
-                setTimeout( async () => {
                     const response = await axios.get( url, {
                         signal
                     } )
@@ -33,7 +25,7 @@ const useFetch = ( dataUrl ) => {
                         setData( response.data );
                         setCatchError( null );
                     }
-                }, 2000 )
+
             } catch ( err ) {
                 // Catch the error
                 if ( isMounted ) {
@@ -42,7 +34,7 @@ const useFetch = ( dataUrl ) => {
                 }
             } finally {
                 // Set loading to initial state
-                isMounted && setTimeout( () => setIsLoading( false ), 2000 );
+                isMounted && setIsLoading( false );
             }
         }
         // Call the Fetch Data function
@@ -54,9 +46,8 @@ const useFetch = ( dataUrl ) => {
             isMounted = false;
             controller.abort();
         };
-    }, [ dataUrl ] );
+    }, [dataUrl] );
 
-    return { data, catchError, isLoading };
 }
 
 export default useFetch;

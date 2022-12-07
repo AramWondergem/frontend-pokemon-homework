@@ -1,53 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import React, {useState} from 'react';
 import pickachuGif from "../assets/Pikachu_walks.gif"
 import useFetch from "../customHooks/useFetch";
+import computerSaysNo from "../assets/computers-says-no.gif";
 
-function PokemonCard({url}) {
+function PokemonCard({dataUrl}) {
 
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    console.log(url)
-    async function fetchData() {
-        setLoading(true);
-
-        try {
-            const pokemonData = await axios.get(url)
-
-            console.log(pokemonData)
-
-            setData(pokemonData.data);
-
-        } catch (e) {
-
-            console.error(e.message)
-
-        }
-        setLoading(false);
-
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, []);
+    const [isLoading, setIsLoading] = useState(false);
+    const [catchError, setCatchError] = useState(null);
 
 
-    //
-    // useEffect(() => {
-    //     if (Object.keys(data).length > 0) {
-    //         setLoading(false);
-    //     }
-    //
-    //
-    //     // const {name, moves, weight, abilities, sprites: {front_shiny}} = data.data;
-    //
-    // }, [data])
+    useFetch(dataUrl, setData, setCatchError, setIsLoading)
+
 
     return (
         <div>
 
-            {loading &&
+            {isLoading &&
                 <>
                     <img src={pickachuGif} alt="walking Pikachu"/>
                     <p>Look, Pikachu is collecting the pokemons</p>
@@ -61,9 +30,22 @@ function PokemonCard({url}) {
                     <h3>Weight: {data.weight}</h3>
                     <h3>Abilities</h3>
                     <ul> {
-                        data.abilities.map((ability) => <li key={`${data.name}-${ability.ability.name}`}>{ability.ability.name}</li>)
+                        data.abilities.map((ability) => <li
+                            key={`${data.name}-${ability.ability.name}`}>{ability.ability.name}</li>)
                     }</ul>
                 </>
+            }
+            {
+                catchError !== null &&
+
+                <>
+
+                    <img src={computerSaysNo} alt="GIF of computer says no scene of little britian"/>
+
+                    <p>Something went wrong when loading the page. Maybe you can refresh the page</p>
+
+                </>
+
             }
 
 
