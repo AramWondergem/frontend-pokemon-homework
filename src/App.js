@@ -22,18 +22,15 @@ function App() {
             <div>
                 <button disabled={data.previous === null} onClick={() => setDataUrl(data.previous)}>Vorige</button>
                 <button disabled={data.next === null} onClick={() => setDataUrl(data.next)}>Volgende</button>
+                <button onClick={() => catchError ? setCatchError(null): setCatchError(true)}>Computer-says-no-button</button>
             </div>
             <div>
                 {
                     isLoading &&
                     <p>🏃‍♀️The elves are running hard at the moment to fetch your pokemons 🏃‍♂️</p>
                 }
-                {Object.keys(data).length > 0 &&
-                    data.results.map((item) => <PokemonCard key={item.url} dataUrl={item.url}/>)
-
-                }
                 {
-                    catchError !== null &&
+                    catchError !== null && !isLoading &&
 
                     <>
 
@@ -44,6 +41,11 @@ function App() {
                     </>
 
                 }
+                {Object.keys(data).length > 0 &&
+                    data.results.map((item) => <PokemonCard key={item.url} dataUrl={item.url}/>)
+
+                }
+
             </div>
         </div>
 
